@@ -16,17 +16,10 @@
             box-sizing: border-box;
         }
 
-        /* Variables for consistent theming (تم التعديل هنا) */
+        /* Variables for consistent theming */
         :root {
-            /* تدرج الألوان الحالي (نحتفظ به للأزرار) */
             --primary-gradient: linear-gradient(135deg, #0d47a1, #29b6f6);
-            /* التدرج الأبيض اللامع الجديد (White to Transparent) */
-            --white-gradient: linear-gradient(90deg, 
-                                  rgba(255, 255, 255, 1) 0%, 
-                                  rgba(255, 255, 255, 0.8) 50%, 
-                                  rgba(255, 255, 255, 0.5) 75%, 
-                                  rgba(255, 255, 255, 1) 100%);
-            
+            /* لم نعد نستخدم white-gradient بهذا الشكل، سنعدل التنسيق مباشرة */
             --primary-gradient-reverse: linear-gradient(135deg, #29b6f6, #0d47a1);
             --text-dark: #333;
             --text-light: #fff;
@@ -378,56 +371,45 @@
         }
         
         /* -------------------------------------- */
-        /* تأثير التدرج الأبيض اللامع والخلفية الزجاجية (تم التعديل) */
+        /* تعديل جواد دينتل ليكون أبيض مع توهج فقط (بدون خلفية زجاجية أو تدرج نصي) */
         /* -------------------------------------- */
         
-        .glassy-background {
-            /* زيادة العتامة والـ blur والـ padding */
-            background: rgba(255, 255, 255, 0.3); /* خلفية بيضاء شفافة أقوى */
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-            border-radius: 10px; 
-            padding: 7px 18px; 
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); 
-            position: relative;
-            z-index: 1;
-        }
-        
+        /* تم إزالة كلاس glassy-background بالكامل لأنه لم يعد مطلوباً هنا */
+        /* .glassy-background { ... } */
+
         .clinic-name-gradient {
-            /* --- تطبيق التدرج الأبيض الجديد --- */
-            background: var(--white-gradient); 
-            -webkit-background-clip: text; 
-            background-clip: text; 
-            color: transparent; 
+            background: none; /* إلغاء أي خلفية أو تدرج نصي */
+            -webkit-background-clip: unset; 
+            background-clip: unset; 
+            color: white; /* جعل اللون أبيض ثابت */
             font-weight: 800; 
             display: inline-block;
             
-            /* --- إضافة توهج (Glow) لتعزيز اللمعان والوضوح --- */
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 
-                         0 0 10px rgba(41, 182, 246, 0.7); 
+            /* توهج أبيض خفيف */
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 
+                         0 0 15px rgba(255, 255, 255, 0.5); 
         }
         
         /* -------------------------------------- */
-        /* تأثير النبض على الكلمات المفتاحية (Glow Pulse) */
+        /* تأثير النبض على الكلمات المفتاحية (Glow Pulse) (تم التعديل ليكون أبيض) */
         /* -------------------------------------- */
         @keyframes pulse-glow {
             0%, 100% { 
-                /* تعزيز التوهج الأساسي */
-                text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(41, 182, 246, 0.9); 
+                /* توهج أبيض خفيف */
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6); 
                 opacity: 0.95;
             }
             50% { 
-                /* تعزيز التوهج في ذروة النبض */
-                text-shadow: 0 0 20px #fff, 0 0 30px rgba(41, 182, 246, 1), 0 0 40px rgba(13, 71, 161, 0.9); 
+                /* توهج أبيض أقوى في ذروة النبض */
+                text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.8); 
                 opacity: 1;
             }
         }
         .text-pulse {
-            color: #29b6f6; 
+            color: white; /* تغيير اللون إلى الأبيض */
             font-weight: 700;
             animation: pulse-glow 2.5s ease-in-out infinite;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.6); 
+            /* text-shadow سيتم تحديده بواسطة animation */
             display: inline-block;
         }
         
@@ -664,11 +646,11 @@
             /* تقليل قوة التوهج للنص على أصغر الشاشات */
             @keyframes pulse-glow {
                 0%, 100% { 
-                    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(41, 182, 246, 0.6); 
+                    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.6); 
                     opacity: 0.95;
                 }
                 50% { 
-                    text-shadow: 0 0 15px #fff, 0 0 25px rgba(41, 182, 246, 0.8); 
+                    text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.8); 
                     opacity: 1;
                 }
             }
@@ -728,7 +710,7 @@
         <div class="hero-overlay"></div>
         
         <div class="hero-content">
-            <h1 class="animated-element" style="animation-delay: 0.2s;">ابتسامة أقوى… <br> حياة أهدأ مع <span class="clinic-name-gradient glassy-background">جواد دينتل</span>.</h1>
+            <h1 class="animated-element" style="animation-delay: 0.2s;">ابتسامة أقوى… <br> حياة أهدأ مع <span class="clinic-name-gradient">جواد دينتل</span>.</h1>
             
             <p class="animated-element" style="animation-delay: 0.5s;">صحة أسنانك مش رفاهية، دي أساس راحتك وثقتك بنفسك.<br> ومع جواد دينتل، كل <span class="text-pulse">استثمار</span> في ابتسامتك هو خطوة أكيدة لراحة نفسية و<span class="text-pulse">جودة حياة أعلى</span> بكتير من أي تكلفة.</p>
             
