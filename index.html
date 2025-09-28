@@ -1,807 +1,917 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>عيادة الأسنان - ابتسامتك تبدأ هنا</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Almarai:wght@300;400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* CSS Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        /* Variables for consistent theming */
+      /* Variables for consistent theming */
+      :root {
+        --primary-gradient: linear-gradient(135deg, #0d47a1, #29b6f6);
+        /* لم نعد نستخدم white-gradient بهذا الشكل، سنعدل التنسيق مباشرة */
+        --primary-gradient-reverse: linear-gradient(135deg, #29b6f6, #0d47a1);
+        --text-dark: #333;
+        --text-light: #fff;
+        --bg-white: #fff;
+        --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+        --top-bar-height: 40px;
+        --navbar-height: 90px;
+        --header-height: calc(var(--top-bar-height) + var(--navbar-height));
+      }
+
+      /* تغيير الخطوط الأساسية والاتجاه للغة العربية */
+      body {
+        font-family: "Almarai", sans-serif;
+        overflow-x: hidden;
+        direction: rtl; /* الاتجاه من اليمين لليسار */
+        text-align: right;
+        background-color: var(--bg-white);
+        color: var(--text-dark);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Cairo", sans-serif; /* خط العناوين */
+      }
+
+      body.dark-theme {
+        --text-dark: #f0f0f0;
+        --bg-white: #1a1a1a;
+        --shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        color: var(--text-dark);
+      }
+
+      /* Fixed Header Container */
+      .header-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--bg-white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Top Bar Styles */
+      .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5%;
+        background-color: var(--bg-white);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        font-size: 14px;
+        position: relative;
+        height: var(--top-bar-height);
+      }
+
+      .top-bar::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 5%;
+        width: 90%;
+        height: 1px;
+        background: linear-gradient(
+          to left,
+          transparent,
+          rgba(13, 71, 161, 0.2),
+          transparent
+        );
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 12px;
+        order: 2;
+      }
+
+      .utility-icons {
+        display: flex;
+        gap: 12px;
+        order: 1;
+      }
+
+      .icon {
+        font-size: 14px;
+        color: #777;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .icon i {
+        z-index: 2;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .icon:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(13, 71, 161, 0.3);
+      }
+
+      .icon::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 1;
+      }
+
+      .icon:hover::before {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      /* Main Navbar Styles */
+      .navbar {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5%;
+        background-color: var(--bg-white);
+        z-index: 1000;
+        height: var(--navbar-height);
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+
+      .logo-container img {
+        height: 60px;
+        max-width: 100%;
+        object-fit: contain;
+        transition: var(--transition);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 35px;
+        align-items: center;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+        padding: 10px 0;
+        font-family: "Cairo", sans-serif;
+        font-size: 16px;
+      }
+
+      .nav-links a:not(.cta-btn):hover {
+        color: #0d47a1;
+      }
+
+      .nav-links a:not(.cta-btn)::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 0;
+        height: 3px;
+        background: var(--primary-gradient);
+        transition: var(--transition);
+        border-radius: 2px;
+      }
+
+      .nav-links a:not(.cta-btn):hover::after {
+        width: 100%;
+      }
+
+      /* تحسين زر CTA */
+      .cta-btn {
+        background: var(--primary-gradient);
+        color: var(--text-light) !important;
+        padding: 15px 35px !important;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(13, 71, 161, 0.2);
+        position: relative;
+        overflow: hidden;
+        font-family: "Cairo", sans-serif;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+
+      .cta-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(13, 71, 161, 0.5);
+      }
+
+      .cta-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          -90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: right 0.5s;
+      }
+
+      .cta-btn:hover::before {
+        right: 100%;
+      }
+
+      /* Hamburger Styles */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 0;
+        width: 30px;
+        height: 25px;
+        position: relative;
+        z-index: 1001;
+        padding: 0;
+        justify-content: space-between;
+      }
+
+      .hamburger span {
+        width: 100%;
+        height: 3px;
+        background: var(--text-dark);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        transform-origin: 50% 50%;
+        position: absolute;
+        right: 0;
+        left: 0;
+      }
+
+      .hamburger span:nth-child(1) {
+        top: 0;
+      }
+
+      .hamburger span:nth-child(2) {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .hamburger span:nth-child(3) {
+        bottom: 0;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: translateY(11px) rotate(45deg);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: translateY(-11px) rotate(-45deg);
+      }
+
+      /* Hero Section Styles */
+      .hero {
+        padding-top: var(--header-height);
+        min-height: 120vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--text-light);
+      }
+
+      .hero svg {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 15vw;
+        max-height: 150px;
+        z-index: 1;
+      }
+
+      .hero-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* width: 100%; */
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+      }
+
+      /* --- طبقة التغطية على الفيديو (Overlay) --- */
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--primary-gradient);
+        opacity: 0.7; /* تم زيادة العتامة لضمان وضوح النص */
+        z-index: -1;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        padding: 0 20px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Animation: Slide Up Content */
+      .animated-element {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: slideUpContent 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+
+      .hero h1 {
+        font-size: 3.8rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        letter-spacing: 1px;
+        font-family: "Cairo", sans-serif;
+      }
+
+      /* -------------------------------------- */
+      /* تعديل جواد دينتل ليكون أبيض مع توهج فقط (بدون خلفية زجاجية أو تدرج نصي) */
+      /* -------------------------------------- */
+
+      /* تم إزالة كلاس glassy-background بالكامل لأنه لم يعد مطلوباً هنا */
+      /* .glassy-background { ... } */
+
+      .clinic-name-gradient {
+        background: none; /* إلغاء أي خلفية أو تدرج نصي */
+        -webkit-background-clip: unset;
+        background-clip: unset;
+        color: white; /* جعل اللون أبيض ثابت */
+        font-weight: 800;
+        display: inline-block;
+
+        /* توهج أبيض خفيف */
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.2),
+          0 0 15px rgba(255, 255, 255, 0.5);
+      }
+
+      /* -------------------------------------- */
+      /* تأثير النبض على الكلمات المفتاحية (Glow Pulse) (تم التعديل ليكون أبيض) */
+      /* -------------------------------------- */
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          /* توهج أبيض خفيف */
+          text-shadow: 0 0 5px rgba(255, 255, 255, 0.6),
+            0 0 10px rgba(255, 255, 255, 0.4);
+          opacity: 0.95;
+        }
+        50% {
+          /* توهج أبيض أقوى في ذروة النبض */
+          text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.6);
+          opacity: 1;
+        }
+      }
+      .text-pulse {
+        color: white; /* تغيير اللون إلى الأبيض */
+        font-weight: 700;
+        animation: pulse-glow 2.5s ease-in-out infinite;
+        /* text-shadow سيتم تحديده بواسطة animation */
+        display: inline-block;
+      }
+
+      /* -------------------------------------- */
+
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        font-weight: 300;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        opacity: 0.9;
+        font-family: "Almarai", sans-serif;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 14px 32px;
+        border-radius: 30px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        font-family: "Cairo", sans-serif;
+        font-size: 16px;
+        white-space: nowrap;
+      }
+
+      /* تنسيق الأيقونات داخل الأزرار */
+      .btn i {
+        margin-left: 10px;
+        transition: var(--transition);
+      }
+
+      .btn-primary {
+        background: var(--primary-gradient);
+        color: var(--text-light);
+        box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(13, 71, 161, 0.7),
+          0 0 30px rgba(41, 182, 246, 0.5); /* توهج إضافي */
+      }
+      .btn-primary:hover i {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      .btn-secondary {
+        border: 2px solid var(--text-light);
+        color: var(--text-light);
+        background: transparent;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-4px);
+        background: var(--text-light);
+        color: #0d47a1;
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2),
+          0 0 20px rgba(255, 255, 255, 0.4);
+      }
+      .btn-secondary:hover i {
+        transform: translateX(-3px);
+      }
+
+      /* WhatsApp Float Button */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        left: auto;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #25d366;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        z-index: 1000;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        animation: slideUp 0.8s ease forwards, float 3s ease-in-out infinite,
+          scale-pulse 2s infinite 1.5s;
+        opacity: 0;
+        border: none;
+      }
+
+      .whatsapp-float:hover {
+        transform: scale(1.1) rotate(-5deg);
+        box-shadow: 0 12px 30px rgba(37, 211, 102, 0.8);
+      }
+
+      .whatsapp-float::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        z-index: -1;
+      }
+
+      .whatsapp-float:hover::before {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+
+      .whatsapp-icon {
+        font-size: 30px;
+        color: white;
+        transition: var(--transition);
+      }
+
+      /* Keyframe Animations */
+      @keyframes slideUpContent {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes scale-pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 6px 35px rgba(37, 211, 102, 0.9);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+        }
+      }
+
+      /* -------------------------------------- */
+      /* Mobile Responsiveness for RTL */
+      /* -------------------------------------- */
+      @media (max-width: 768px) {
         :root {
-            --primary-gradient: linear-gradient(135deg, #0d47a1, #29b6f6);
-            /* لم نعد نستخدم white-gradient بهذا الشكل، سنعدل التنسيق مباشرة */
-            --primary-gradient-reverse: linear-gradient(135deg, #29b6f6, #0d47a1);
-            --text-dark: #333;
-            --text-light: #fff;
-            --bg-white: #fff;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-            --top-bar-height: 40px; 
-            --navbar-height: 90px; 
-            --header-height: calc(var(--top-bar-height) + var(--navbar-height)); 
+          --top-bar-height: 40px;
+          --navbar-height: 70px;
         }
 
-        /* تغيير الخطوط الأساسية والاتجاه للغة العربية */
-        body {
-            font-family: 'Almarai', sans-serif;
-            overflow-x: hidden;
-            direction: rtl; /* الاتجاه من اليمين لليسار */
-            text-align: right;
-            background-color: var(--bg-white);
-            color: var(--text-dark);
+        .hero-video {
+          position: absolute;
+          top: 0;
+          left: -175px;
+          height: 100%;
+          object-fit: cover;
+          z-index: -2;
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Cairo', sans-serif; /* خط العناوين */
-        }
-
-        body.dark-theme {
-            --text-dark: #f0f0f0;
-            --bg-white: #1a1a1a;
-            --shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-            color: var(--text-dark);
-        }
-
-        /* Fixed Header Container */
-        .header-container {
-            position: fixed; 
-            top: 0;
-            right: 0; 
-            width: 100%;
-            z-index: 1000;
-            background-color: var(--bg-white);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Top Bar Styles */
         .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            background-color: var(--bg-white);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            font-size: 14px;
-            position: relative;
-            height: var(--top-bar-height); 
+          padding: 0 3%;
+          height: var(--top-bar-height);
         }
-
-        .top-bar::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 5%; 
-            width: 90%;
-            height: 1px;
-            background: linear-gradient(to left, transparent, rgba(13, 71, 161, 0.2), transparent);
-        }
-
         .social-icons {
-            display: flex;
-            gap: 12px;
-            order: 2; 
+          order: 2;
+          gap: 8px;
         }
-        
         .utility-icons {
-            display: flex;
-            gap: 12px;
-            order: 1; 
+          order: 1;
+          gap: 8px;
         }
 
-        .icon {
-            font-size: 14px;
-            color: #777;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.03);
-            overflow: hidden; 
-            z-index: 1; 
-        }
-
-        .icon i {
-            z-index: 2; 
-            position: relative;
-            transition: color 0.3s ease; 
-        }
-        
-        .icon:hover {
-            color: white; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.3); 
-        }
-        
-        .icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1; 
-        }
-
-        .icon:hover::before {
-            opacity: 1;
-            transform: scale(1.1); 
-        }
-
-        /* Main Navbar Styles */
         .navbar {
-            display: flex;
-            flex-direction: row-reverse; 
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5%;
-            background-color: var(--bg-white);
-            z-index: 1000;
-            height: var(--navbar-height); 
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            height: 100%;
+          padding: 0 3%;
+          height: var(--navbar-height);
+          flex-direction: row-reverse;
         }
 
         .logo-container img {
-            height: 60px; 
-            max-width: 100%;
-            object-fit: contain;
-            transition: var(--transition);
+          height: 45px;
+        }
+
+        .hero {
+          padding-top: var(--header-height);
         }
 
         .nav-links {
-            display: flex;
-            gap: 35px;
-            align-items: center;
+          position: fixed;
+          top: 0;
+          right: -100%;
+          left: auto;
+          width: 70%;
+          height: 100vh;
+          background: var(--bg-white);
+          flex-direction: column;
+          justify-content: center;
+          gap: 40px;
+          transition: right 0.3s ease;
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            padding: 10px 0;
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-        }
-        
-        .nav-links a:not(.cta-btn):hover {
-            color: #0d47a1;
+        .nav-links.active {
+          right: 0;
+          left: auto;
         }
 
-        .nav-links a:not(.cta-btn)::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0; 
-            width: 0;
-            height: 3px;
-            background: var(--primary-gradient);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .nav-links a:not(.cta-btn):hover::after {
-            width: 100%;
-        }
-
-        /* تحسين زر CTA */
-        .cta-btn {
-            background: var(--primary-gradient);
-            color: var(--text-light) !important; 
-            padding: 15px 35px !important; 
-            border-radius: 30px;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.2);
-            position: relative;
-            overflow: hidden;
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            line-height: 1.2; 
-            white-space: nowrap; 
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-4px); 
-            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.5); 
-        }
-
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -100%; 
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, 0.4), transparent); 
-            transition: right 0.5s;
-        }
-
-        .cta-btn:hover::before {
-            right: 100%; 
-        }
-
-        /* Hamburger Styles */
         .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 0; 
-            width: 30px;
-            height: 25px; 
-            position: relative; 
-            z-index: 1001; 
-            padding: 0; 
-            justify-content: space-between; 
+          display: flex;
+          z-index: 1002;
         }
 
-        .hamburger span {
-            width: 100%;
-            height: 3px;
-            background: var(--text-dark);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            transform-origin: 50% 50%; 
-            position: absolute; 
-            right: 0; 
-            left: 0; 
-        }
-
-        .hamburger span:nth-child(1) {
-            top: 0; 
-        }
-        
-        .hamburger span:nth-child(2) {
-            top: 50%; 
-            transform: translateY(-50%); 
-        }
-        
-        .hamburger span:nth-child(3) {
-            bottom: 0; 
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: translateY(11px) rotate(45deg); 
-        }
-        
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0); 
-        }
-        
-        .hamburger.active span:nth-child(3) {
-            transform: translateY(-11px) rotate(-45deg); 
-        }
-
-        /* Hero Section Styles */
-        .hero {
-            padding-top: var(--header-height); 
-            min-height: 120vh; 
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-light);
-        }
-        
-        .hero svg {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 15vw; 
-            max-height: 150px;
-            z-index: 1; 
-        }
-        
-        .hero-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -2;
-        }
-
-        /* --- طبقة التغطية على الفيديو (Overlay) --- */
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-gradient);
-            opacity: 0.7; /* تم زيادة العتامة لضمان وضوح النص */
-            z-index: -1;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            padding: 0 20px;
-            z-index: 2; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        /* Animation: Slide Up Content */
-        .animated-element {
-            opacity: 0;
-            transform: translateY(30px); 
-            animation: slideUpContent 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
-        }
-        
         .hero h1 {
-            font-size: 3.8rem; 
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            letter-spacing: 1px;
-            font-family: 'Cairo', sans-serif;
+          font-size: 2.2rem;
         }
-        
-        /* -------------------------------------- */
-        /* تعديل جواد دينتل ليكون أبيض مع توهج فقط (بدون خلفية زجاجية أو تدرج نصي) */
-        /* -------------------------------------- */
-        
-        /* تم إزالة كلاس glassy-background بالكامل لأنه لم يعد مطلوباً هنا */
-        /* .glassy-background { ... } */
-
-        .clinic-name-gradient {
-            background: none; /* إلغاء أي خلفية أو تدرج نصي */
-            -webkit-background-clip: unset; 
-            background-clip: unset; 
-            color: white; /* جعل اللون أبيض ثابت */
-            font-weight: 800; 
-            display: inline-block;
-            
-            /* توهج أبيض خفيف */
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 
-                         0 0 15px rgba(255, 255, 255, 0.5); 
-        }
-        
-        /* -------------------------------------- */
-        /* تأثير النبض على الكلمات المفتاحية (Glow Pulse) (تم التعديل ليكون أبيض) */
-        /* -------------------------------------- */
-        @keyframes pulse-glow {
-            0%, 100% { 
-                /* توهج أبيض خفيف */
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6); 
-                opacity: 0.95;
-            }
-            50% { 
-                /* توهج أبيض أقوى في ذروة النبض */
-                text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.8); 
-                opacity: 1;
-            }
-        }
-        .text-pulse {
-            color: white; /* تغيير اللون إلى الأبيض */
-            font-weight: 700;
-            animation: pulse-glow 2.5s ease-in-out infinite;
-            /* text-shadow سيتم تحديده بواسطة animation */
-            display: inline-block;
-        }
-        
-        /* -------------------------------------- */
-
         .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            font-weight: 300;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            opacity: 0.9;
-            font-family: 'Almarai', sans-serif;
+          font-size: 1rem;
         }
-        
+
         .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
+          flex-direction: column;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .btn i {
+          margin-left: 8px;
         }
 
         .btn {
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-            white-space: nowrap; 
-        }
-        
-        /* تنسيق الأيقونات داخل الأزرار */
-        .btn i {
-            margin-left: 10px; 
-            transition: var(--transition);
+          padding: 12px 25px;
+          font-size: 14px;
+          width: 100%;
+          max-width: 300px;
         }
 
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: var(--text-light);
-            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+        .cta-btn {
+          padding: 12px 25px !important;
+          font-size: 14px;
+          white-space: normal;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-4px); 
-            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.7), 
-                        0 0 30px rgba(41, 182, 246, 0.5);   /* توهج إضافي */
-        }
-        .btn-primary:hover i {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .btn-secondary {
-            border: 2px solid var(--text-light);
-            color: var(--text-light);
-            background: transparent;
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-4px); 
-            background: var(--text-light);
-            color: #0d47a1;
-            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2), 
-                        0 0 20px rgba(255, 255, 255, 0.4); 
-        }
-        .btn-secondary:hover i {
-            transform: translateX(-3px); 
-        }
-
-
-        /* WhatsApp Float Button */
         .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px; 
-            left: auto;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #25D366; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6); 
-            z-index: 1000;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            animation: slideUp 0.8s ease forwards, float 3s ease-in-out infinite, scale-pulse 2s infinite 1.5s; 
-            opacity: 0;
-            border: none; 
-        }
-        
-        .whatsapp-float:hover {
-            transform: scale(1.1) rotate(-5deg); 
-            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.8);
-        }
-        
-        .whatsapp-float::before {
-             content: '';
-             position: absolute;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
-             border-radius: 50%;
-             background-color: rgba(255, 255, 255, 0.1); 
-             transition: all 0.3s ease;
-             z-index: -1;
-        }
-        
-        .whatsapp-float:hover::before {
-            transform: scale(1.3);
-            opacity: 0;
+          width: 50px;
+          height: 50px;
+          bottom: 20px;
+          right: 20px;
+          left: auto;
         }
 
         .whatsapp-icon {
-            font-size: 30px; 
-            color: white;
-            transition: var(--transition);
+          font-size: 24px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+        .logo-container img {
+          height: 40px;
         }
 
-        /* Keyframe Animations */
-        @keyframes slideUpContent {
-            to { opacity: 1; transform: translateY(0); }
+        /* تقليل قوة التوهج للنص على أصغر الشاشات */
+        @keyframes pulse-glow {
+          0%,
+          100% {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+              0 0 10px rgba(255, 255, 255, 0.6);
+            opacity: 0.95;
+          }
+          50% {
+            text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.8);
+            opacity: 1;
+          }
         }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        
-        @keyframes scale-pulse {
-            0% { transform: scale(1); box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6); }
-            50% { transform: scale(1.05); box-shadow: 0 6px 35px rgba(37, 211, 102, 0.9); }
-            100% { transform: scale(1); box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6); }
-        }
-
-
-        /* -------------------------------------- */
-        /* Mobile Responsiveness for RTL */
-        /* -------------------------------------- */
-        @media (max-width: 768px) {
-            :root {
-                --top-bar-height: 40px; 
-                --navbar-height: 70px; 
-            }
-            
-            .top-bar { padding: 0 3%; height: var(--top-bar-height); }
-            .social-icons { order: 2; gap: 8px; }
-            .utility-icons { order: 1; gap: 8px; }
-
-            .navbar { 
-                padding: 0 3%; 
-                height: var(--navbar-height);
-                flex-direction: row-reverse; 
-            }
-            
-            .logo-container img { height: 45px; }
-            
-            .hero { padding-top: var(--header-height); }
-            
-            .nav-links {
-                position: fixed; 
-                top: 0; 
-                right: -100%; 
-                left: auto; 
-                width: 70%; 
-                height: 100vh;
-                background: var(--bg-white); 
-                flex-direction: column; 
-                justify-content: center;
-                gap: 40px; 
-                transition: right 0.3s ease; 
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); 
-            }
-            
-            .nav-links.active { 
-                right: 0; 
-                left: auto;
-            }
-            
-            .hamburger { display: flex; z-index: 1002; } 
-
-            .hero h1 { font-size: 2.2rem; } 
-            .hero p { font-size: 1rem; }
-            
-            .hero-buttons { 
-                flex-direction: column; 
-                align-items: center; 
-                gap: 15px; 
-            }
-            
-            .btn i {
-                margin-left: 8px; 
-            }
-
-            .btn { 
-                padding: 12px 25px; 
-                font-size: 14px; 
-                width: 100%; 
-                max-width: 300px;
-            }
-            
-            .cta-btn { 
-                padding: 12px 25px !important; 
-                font-size: 14px; 
-                white-space: normal; 
-            }
-            
-            .whatsapp-float {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 20px; 
-                left: auto;
-            }
-            
-            .whatsapp-icon { font-size: 24px; }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 1.8rem; } 
-            .logo-container img { height: 40px; }
-            
-            /* تقليل قوة التوهج للنص على أصغر الشاشات */
-            @keyframes pulse-glow {
-                0%, 100% { 
-                    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.6); 
-                    opacity: 0.95;
-                }
-                50% { 
-                    text-shadow: 0 0 15px #fff, 0 0 25px rgba(255, 255, 255, 0.8); 
-                    opacity: 1;
-                }
-            }
-            
-        }
+      }
     </style>
-</head>
-<body>
-    <svg style="display:none;">
-      <symbol id="concave-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="var(--bg-white)" d="M0,32L120,69.3C240,107,480,181,720,192C960,203,1200,149,1320,122.7L1440,96L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path>
+  </head>
+  <body>
+    <svg style="display: none">
+      <symbol
+        id="concave-wave"
+        viewBox="0 0 1440 320"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="var(--bg-white)"
+          d="M0,32L120,69.3C240,107,480,181,720,192C960,203,1200,149,1320,122.7L1440,96L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"
+        ></path>
       </symbol>
     </svg>
     <div class="header-container">
-        <div class="top-bar">
-            <div class="utility-icons">
-                <span class="icon"><i class="fas fa-globe"></i></span>
-                <span class="icon theme-toggle"><i class="fas fa-sun"></i></span>
-            </div>
-            <div class="social-icons">
-                <span class="icon"><i class="fab fa-facebook-f"></i></span>
-                <span class="icon"><i class="fab fa-instagram"></i></span>
-                <span class="icon"><i class="fab fa-linkedin-in"></i></span>
-            </div>
+      <div class="top-bar">
+        <div class="utility-icons">
+          <span class="icon"><i class="fas fa-globe"></i></span>
+          <span class="icon theme-toggle"><i class="fas fa-sun"></i></span>
+        </div>
+        <div class="social-icons">
+          <span class="icon"><i class="fab fa-facebook-f"></i></span>
+          <span class="icon"><i class="fab fa-instagram"></i></span>
+          <span class="icon"><i class="fab fa-linkedin-in"></i></span>
+        </div>
+      </div>
+
+      <nav class="navbar">
+        <div class="logo-container">
+          <img src="assets/images/logo (1).webp" alt="لوجو الدكتور" />
         </div>
 
-        <nav class="navbar">
-            <div class="logo-container">
-                <img src="assets/images/logo (1).webp" alt="لوجو الدكتور">
-            </div>
-            
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            
-            <div class="nav-links" id="navLinks">
-                <a href="#appointment" class="cta-btn">احجز موعدك</a>
-                <a href="#home">الرئيسية</a>
-                <a href="#about">عن العيادة</a>
-                <a href="#services">الخدمات</a>
-                <a href="#contact">اتصل بنا</a>
-            </div>
-        </nav>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+          <a href="#appointment" class="cta-btn">احجز موعدك</a>
+          <a href="#home">الرئيسية</a>
+          <a href="#about">عن العيادة</a>
+          <a href="#services">الخدمات</a>
+          <a href="#contact">اتصل بنا</a>
+        </div>
+      </nav>
     </div>
 
     <section class="hero" id="home">
-        <video autoplay muted loop class="hero-video">
-            <source src="6529153-uhd_1440_2732_25fps.mp4" type="video/mp4">
-            متصفحك لا يدعم وسم الفيديو.
-        </video>
-        <div class="hero-overlay"></div>
-        
-        <div class="hero-content">
-            <h1 class="animated-element" style="animation-delay: 0.2s;">ابتسامة أقوى… <br> حياة أهدأ مع <span class="clinic-name-gradient">جواد دينتل</span>.</h1>
-            
-            <p class="animated-element" style="animation-delay: 0.5s;">صحة أسنانك مش رفاهية، دي أساس راحتك وثقتك بنفسك.<br> ومع جواد دينتل، كل <span class="text-pulse">استثمار</span> في ابتسامتك هو خطوة أكيدة لراحة نفسية و<span class="text-pulse">جودة حياة أعلى</span> بكتير من أي تكلفة.</p>
-            
-            <div class="hero-buttons">
-                <a href="#appointment" class="btn btn-primary animated-element" style="animation-delay: 0.9s;">
-                    <i class="fas fa-video"></i>
-                    ابدأ استشارتك أونلاين دلوقتي
-                </a>
-                <a href="#services" class="btn btn-secondary animated-element" style="animation-delay: 1.2s;">
-                    استكشف تجربتنا المختلفة 
-                    <i class="fas fa-arrow-left"></i>
-                </a>
-            </div>
+      <video autoplay muted loop class="hero-video">
+        <source src="hero-video.mp4" type="video/mp4" />
+        متصفحك لا يدعم وسم الفيديو.
+      </video>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1 class="animated-element" style="animation-delay: 0.2s">
+          ابتسامة أقوى , <br />
+          حياة أهدأ مع <span class="clinic-name-gradient">جواد دينتل</span>.
+        </h1>
+
+        <p class="animated-element" style="animation-delay: 0.5s">
+          صحة أسنانك مش رفاهية، دي أساس راحتك وثقتك بنفسك.<br />
+          ومع جواد دينتل، كل <span class="text-pulse">استثمار</span> في ابتسامتك
+          هو خطوة أكيدة لراحة نفسية و<span class="text-pulse"
+            >جودة حياة أعلى</span
+          >
+          بكتير من أي تكلفة.
+        </p>
+
+        <div class="hero-buttons">
+          <a
+            href="#appointment"
+            class="btn btn-primary animated-element"
+            style="animation-delay: 0.9s"
+          >
+            <i class="fas fa-video"></i>
+            ابدأ استشارتك أونلاين دلوقتي
+          </a>
+          <a
+            href="#services"
+            class="btn btn-secondary animated-element"
+            style="animation-delay: 1.2s"
+          >
+            استكشف تجربتنا المختلفة
+            <i class="fas fa-arrow-left"></i>
+          </a>
         </div>
-        
-        <svg class="position-absolute w-100">
-          <use xlink:href="#concave-wave"></use>
-        </svg>
+      </div>
+
+      <svg class="position-absolute w-100">
+        <use xlink:href="#concave-wave"></use>
+      </svg>
     </section>
 
     <div class="whatsapp-float">
-        <span class="whatsapp-icon"><i class="fab fa-whatsapp"></i></span>
+      <span class="whatsapp-icon"><i class="fab fa-whatsapp"></i></span>
     </div>
 
     <script>
-        // Mobile Menu Toggle 
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
-        });
-        
-        // Close mobile menu when clicking on a link 
-        const navItems = document.querySelectorAll('.nav-links a');
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = 'auto'; 
-                }
-            });
-        });
-        
-        // Theme toggle functionality 
-        const themeToggle = document.querySelector('.theme-toggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            if (document.body.classList.contains('dark-theme')) {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        });
-        
-        // Add smooth scrolling 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                const headerContainer = document.querySelector('.header-container');
-                
-                if (targetElement && headerContainer) {
-                    const headerHeight = headerContainer.offsetHeight;
-                    window.scrollTo({
-                        top: targetElement.offsetTop - headerHeight,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Fix for Hero padding on resize and load 
-        function adjustHeroPadding() {
-            const headerContainer = document.querySelector('.header-container');
-            const heroElement = document.querySelector('.hero');
-            if (headerContainer && heroElement) {
-                const headerHeight = headerContainer.offsetHeight;
-                document.body.style.scrollPaddingTop = `${headerHeight}px`;
+      // Mobile Menu Toggle
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("navLinks");
 
-                heroElement.style.paddingTop = `${headerHeight}px`;
-                heroElement.style.minHeight = `120vh`; 
-            }
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("active");
+        document.body.style.overflow = navLinks.classList.contains("active")
+          ? "hidden"
+          : "auto";
+      });
+
+      // Close mobile menu when clicking on a link
+      const navItems = document.querySelectorAll(".nav-links a");
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          if (window.innerWidth <= 768) {
+            hamburger.classList.remove("active");
+            navLinks.classList.remove("active");
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+
+      // Theme toggle functionality
+      const themeToggle = document.querySelector(".theme-toggle");
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-theme");
+        if (document.body.classList.contains("dark-theme")) {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         }
-        
-        window.addEventListener('resize', adjustHeroPadding);
-        window.addEventListener('load', adjustHeroPadding);
-        document.addEventListener('DOMContentLoaded', adjustHeroPadding);
+      });
+
+      // Add smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          const headerContainer = document.querySelector(".header-container");
+
+          if (targetElement && headerContainer) {
+            const headerHeight = headerContainer.offsetHeight;
+            window.scrollTo({
+              top: targetElement.offsetTop - headerHeight,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Fix for Hero padding on resize and load
+      function adjustHeroPadding() {
+        const headerContainer = document.querySelector(".header-container");
+        const heroElement = document.querySelector(".hero");
+        if (headerContainer && heroElement) {
+          const headerHeight = headerContainer.offsetHeight;
+          document.body.style.scrollPaddingTop = `${headerHeight}px`;
+
+          heroElement.style.paddingTop = `${headerHeight}px`;
+          heroElement.style.minHeight = `110vh`;
+        }
+      }
+
+      window.addEventListener("resize", adjustHeroPadding);
+      window.addEventListener("load", adjustHeroPadding);
+      document.addEventListener("DOMContentLoaded", adjustHeroPadding);
     </script>
-</body>
+  </body>
 </html>
